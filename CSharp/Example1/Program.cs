@@ -12,12 +12,13 @@ namespace Example1
         {
             try
             {
+                SuperSimpleParser.CommandLineParser clp = SuperSimpleParser.CommandLineParser.Parse(Environment.CommandLine);
                 // Get user name and password from environnement variables
-                string userName = Environment.GetEnvironmentVariable("QFUser");
-                string password = Environment.GetEnvironmentVariable("QFPassword");
-                string endPoint = Environment.GetEnvironmentVariable("QFEndpoint");
+                string userName = clp.GetString("QFUser", Environment.GetEnvironmentVariable("QFUser"));
+                string password = clp.GetString("QFPassword", Environment.GetEnvironmentVariable("QFPassword"));
+                string endPoint = clp.GetString("QFEndpoint", Environment.GetEnvironmentVariable("QFEndpoint"));
                 if (string.IsNullOrEmpty(endPoint))
-                    endPoint = "https://portal.quanforce.net";
+                    endPoint = "https://portal.quantforce.net"; // Default endpoint
                 string apiEndPoint = endPoint.AppendToURL("api", "v1.0");
 
                 Rest client = new Rest();
@@ -111,11 +112,12 @@ namespace Example1
                     }
 
                     // download Python code
-                    await client.DownloadAsync(apiEndPoint.AppendToURL("file", "export", auth.token, project.id, "Python"), "transform.py");
+                    await client.DownloadAsync(apiEndPoint.AppendToURL("deploy", "export", auth.token, project.id, "Python"), "transform.py");
                     // download Excel
-                    await client.DownloadAsync(apiEndPoint.AppendToURL("file", "export", auth.token, project.id, "Excel"), "transform.xlsx");
+                    await client.DownloadAsync(apiEndPoint.AppendToURL("deploy", "export", auth.token, project.id, "Excel"), "transform.xlsx");
+
                     // Let the api do the tranformation
-                    task = await client.PostRawAsync<AsyncTaskStatus>(apiEndPoint.AppendToURL("transform", auth.token, project.id, "csv", "raw", "65001"), System.IO.File.ReadAllBytes(data)); // 65001 = UTF-8
+                    task = await client.PostRawAsync<AsyncTaskStatus>(apiEndPoint.AppendToURL("deploy", auth.token, project.id, "csv", "raw", "65001"), System.IO.File.ReadAllBytes(data)); // 65001 = UTF-8
                     if (task == null)
                         return;
 
@@ -128,7 +130,8 @@ namespace Example1
                     }
                     Console.WriteLine("Dataset task status = {0}", task.status);
                     // Get the transformed dataset
-                    await client.DownloadAsync(apiEndPoint.AppendToURL("file", "export", auth.token, project.id, "transform"), "data_t.csv");
+                    await client.DownloadAsync(apiEndPoint.AppendToURL("deploy", "export", auth.token, project.id, "transform"), "data_t.csv");
+                    Console.WriteLine("Transformed data downloaded.");
                 }
             }
             catch (Exception ex)
