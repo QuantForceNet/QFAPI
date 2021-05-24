@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Common\API.cs" Link="API.cs" />
+    <Compile Include="..\Common\Rest.cs" Link="Rest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Telco_customer_churn_v1.csv" Link="Telco_customer_churn_v1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>
