@@ -6,3 +6,4 @@
 **/bin
 **/obj
 
+/CSharp/Example1/Properties/launchSettings.json

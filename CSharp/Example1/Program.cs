@@ -12,7 +12,7 @@ namespace Example1
         {
             try
             {
-                // HAve a look a the Wiki for API documentation
+                // Have a look a the Wiki for API documentation
                 SuperSimpleParser.CommandLineParser clp = SuperSimpleParser.CommandLineParser.Parse(Environment.CommandLine);
                 // Get user name and password from environnement variables
                 string userName = clp.GetString("QFUser", Environment.GetEnvironmentVariable("QFUser"));
